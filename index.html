@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тьма и свет | Сообщество будущего</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0a0a14;
+            --secondary: #1a1a2e;
+            --accent: #4d5bce;
+            --accent-light: #6c7bff;
+            --text: #f0f0f0;
+            --text-secondary: #a0a0c0;
+            --profile-bg: rgba(26, 26, 46, 0.8);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Фоновые эффекты */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(108, 123, 255, 0.15);
+            box-shadow: 0 0 15px rgba(108, 123, 255, 0.3);
+            animation: float 15s infinite linear;
+        }
+        
+        .grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(7, 7, 16, 0.9) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(7, 7, 16, 0.9) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.2;
+        }
+
+        /* Навигация */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 20, 0.7);
+            border-bottom: 1px solid rgba(108, 123, 255, 0.2);
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-light), #a5b4fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+            animation: pulse 3s infinite;
+            color: var(--accent-light);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .nav-btn:hover {
+            color: var(--accent-light);
+        }
+        
+        .nav-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-light);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-btn:hover::after {
+            width: 100%;
+        }
+        
+        /* Главный экран */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            padding-top: 80px;
+        }
+        
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--accent-light), #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            cursor: pointer;
+            border: none;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 15px rgba(77, 91, 206, 0.5);
+        }
+        
+        .btn-primary:hover {
+            background: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(77, 91, 206, 0.7);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-light);
+            border: 2px solid var(--accent-light);
+            box-shadow: 0 0 15px rgba(108, 123, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(108, 123, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(108, 123, 255, 0.5);
+        }
+
+        /* Кнопка событий */
+        .events-btn {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(77, 91, 206, 0.7);
+            z-index: 100;
+            animation: bounce 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .events-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(77, 91, 206, 0.9);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 7, 16, 0.97);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, rgba(10, 10, 20, 0.9), rgba(7, 7, 16, 0.95));
+            border: 1px solid var(--accent-light);
+            border-radius: 15px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 10px 50px rgba(108, 123, 255, 0.4);
+            animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            color: var(--accent-light);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 10;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(108, 123, 255, 0.1);
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+            background: rgba(108, 123, 255, 0.2);
+        }
+
+        .modal-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: var(--accent-light);
+            padding-top: 10px;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Стили для правил */
+        .rules-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .rule-item {
+            background: rgba(26, 26, 46, 0.5);
+            margin-bottom: 12px;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--accent-light);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .rule-item:hover {
+            transform: translateX(8px);
+            background: rgba(108, 123, 255, 0.2);
+        }
+
+        .rule-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: var(--accent-light);
+            font-size: 1rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .rule-punishment {
+            background: rgba(255, 85, 85, 0.2);
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #ff5555;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .rule-description {
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .rule-consequence {
+            color: #ff5555;
+            font-weight: bold;
+            font-size: 0.9rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Стили для контактов */
+        .contact-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .contact-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(26, 26, 46, 0.5);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            backdrop-filter: blur(5px);
+        }
+
+        .contact-option:hover {
+            border-color: var(--accent-light);
+            transform: translateY(-3px);
+        }
+
+        .contact-icon {
+            font-size: 1.8rem;
+            color: var(--accent-light);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .contact-text h3 {
+            color: var(--accent-light);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .contact-text a {
+            color: #a5b4fc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .contact-text a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Стили для событий */
+        .events-modal-content {
+            background: linear-gradient(145deg, rgba(10, 10, 20, 0.9), rgba(7, 7, 16, 0.95));
+            border: 1px solid var(--accent-light);
+            border-radius: 15px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 10px 50px rgba(108, 123, 255, 0.4);
+        }
+
+        .event-item {
+            background: rgba(26, 26, 46, 0.5);
+            margin-bottom: 12px;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--accent-light);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .event-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            text-align: right;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Форма входа - УДАЛЕНА */
+        
+        /* Кастомизация */
+        .customization-section {
+            background: rgba(26, 26, 46, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--accent-light);
+        }
+
+        .customization-section h3 {
+            color: var(--accent-light);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 12px 15px;
+            background: rgba(108, 123, 255, 0.3);
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 0.9rem;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .file-input-label:hover {
+            background: rgba(108, 123, 255, 0.5);
+        }
+
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            text-align: center;
+        }
+
+        .creator-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .creator-btn:hover {
+            background: rgba(108, 123, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 123, 255, 0.4);
+        }
+
+        .music-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .music-controls button {
+            flex-grow: 1;
+            min-width: 80px;
+        }
+
+        /* Футер */
+        footer {
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(108, 123, 255, 0.1);
+            background: rgba(7, 7, 16, 0.7);
+            backdrop-filter: blur(5px);
+            margin-top: 50px;
+        }
+        
+        .appreciation {
+            font-size: 1.5rem;
+            color: var(--accent-light);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 1rem;
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            background: rgba(26, 26, 46, 0.95);
+            border: 1px solid var(--accent-light);
+            color: white;
+            z-index: 10000;
+            transform: translateX(200%);
+            transition: transform 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            max-width: 350px;
+            opacity: 0.95;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-color: #2ecc71;
+        }
+
+        .notification.error {
+            border-color: #e74c3c;
+        }
+
+        .notification.info {
+            border-color: #3498db;
+        }
+
+        .notification-icon {
+            font-size: 1.5rem;
+        }
+
+        .notification.success .notification-icon {
+            color: #2ecc71;
+        }
+
+        .notification.error .notification-icon {
+            color: #e74c3c;
+        }
+
+        .notification.info .notification-icon {
+            color: #3498db;
+        }
+
+        /* Языковой переключатель */
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .lang-btn {
+            background: rgba(108, 123, 255, 0.2);
+            border: 1px solid var(--accent-light);
+            border-radius: 8px;
+            color: var(--accent-light);
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-btn:hover {
+            background: rgba(108, 123, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Анимации */
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) translateX(1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .nav-links {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .modal-title {
+                font-size: 1.5rem;
+            }
+            
+            .events-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Фоновые эффекты -->
+    <div class="background">
+        <div class="grid"></div>
+        <!-- Частицы будут созданы с помощью JS -->
+    </div>
+    
+    <!-- Кнопка событий -->
+    <button class="events-btn" id="eventsBtn">
+        <i class="fas fa-calendar-alt"></i>
+    </button>
+
+    <!-- Навигация (удалена кнопка входа) -->
+    <nav>
+        <div class="logo">
+            <i class="fas fa-moon logo-icon"></i>
+            <span data-i18n="siteTitle">Тьма и свет</span>
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn" id="contactBtn" data-i18n="navContact">Связь</button>
+            <button class="nav-btn" id="creatorBtn" data-i18n="navCreator">Создатель</button>
+            <button class="nav-btn" id="customizationBtn" data-i18n="navCustomization">Кастомизация</button>
+        </div>
+    </nav>
+    
+    <!-- Основной контент -->
+    <main>
+        <section class="hero">
+            <h1 class="fade-in" data-i18n="heroTitle">Добро пожаловать в группу!</h1>
+            <p class="fade-in" data-i18n="heroSubtitle">Перед тем как работать, ознакомьтесь с правилами сервера и присоединяйтесь к нашему сообществу</p>
+            
+            <div class="btn-container fade-in">
+                <button class="btn btn-primary" id="addBotBtn">
+                    <i class="fab fa-discord"></i> <span data-i18n="addBotBtn">Добавить бота</span>
+                </button>
+                <button class="btn btn-secondary" id="viewRulesBtn">
+                    <i class="fas fa-book"></i> <span data-i18n="rulesBtn">Правила сервера</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="fade-in">
+        <div class="appreciation" data-i18n="footerAppreciation">Любим вас</div>
+        <p style="color: var(--text-secondary);" data-i18n="footerText">Сообщество "Тьма и свет"</p>
+    </footer>
+
+    <!-- Модальные окна -->
+    <div class="modal" id="rulesModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeRules">&times;</span>
+            <h2 class="modal-title" data-i18n="rulesTitle">ПРАВИЛА СЕРВЕРА</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: var(--accent-light); font-size: 0.95rem;" data-i18n="rulesSubtitle">Соблюдение правил обязательно для всех участников</p>
+            
+            <ul class="rules-list">
+                <li class="rule-item fade-in">
+                    <div class="rule-title">
+                        <span data-i18n="rule1">1. Вежливость и уважение</span>
+                        <span class="rule-punishment" data-i18n="rule1Punishment">1 пред. → 24ч мут → бан</span>
+                    </div>
+                    <p class="rule-description" data-i18n="rule1Desc">Оскорбления, унижения, переход на личности</p>
+                    <p class="rule-consequence" data-i18n="rule1Consequence">🚫 Немедленные санкции</p>
+                </li>
+                
+                <li class="rule-item fade-in">
+                    <div class="rule-title">
+                        <span data-i18n="rule2">2. Запрет спама</span>
+                        <span class="rule-punishment" data-i18n="rule2Punishment">1 пред. → 7д мут → бан</span>
+                    </div>
+                    <p class="rule-description" data-i18n="rule2Desc">Реклама, флуд, бессмысленные сообщения</p>
+                </li>
+                
+                <li class="rule-item fade-in">
+                    <div class="rule-title">
+                        <span data-i18n="rule3">3. Запрещенный контент</span>
+                        <span class="rule-punishment" data-i18n="rule3Punishment">Бан</span>
+                    </div>
+                    <p class="rule-description" data-i18n="rule3Desc">Нелегальные, вредоносные материалы</p>
+                    <p class="rule-consequence" data-i18n="rule3Consequence">🚫 Немедленный бан</p>
+                </li>
+                
+                <li class="rule-item fade-in">
+                    <div class="rule-title">
+                        <span data-i18n="rule4">4. Конфиденциальность</span>
+                        <span class="rule-punishment" data-i18n="rule4Punishment">1 пред. → 30д мут → бан</span>
+                    </div>
+                    <p class="rule-description" data-i18n="rule4Desc">Разглашение личной информации</p>
+                </li>
+                
+                <li class="rule-item fade-in">
+                    <div class="rule-title">
+                        <span data-i18n="rule5">5. Запрет флуда</span>
+                        <span class="rule-punishment" data-i18n="rule5Punishment">1 пред. → 12ч мут → 24ч мут</span>
+                    </div>
+                    <p class="rule-description" data-i18n="rule5Desc">Спам сообщениями, повторение</p>
+                </li>
+                
+                <li class="rule-item fade-in">
+                    <div class="rule-title">
+                        <span data-i18n="rule6">6. Подчинение модерации</span>
+                        <span class="rule-punishment" data-i18n="rule6Punishment">1 пред. → 24ч мут → бан</span>
+                    </div>
+                    <p class="rule-description" data-i18n="rule6Desc">Игнорирование указаний модераторов</p>
+                </li>
+                
+                <li class="rule-item fade-in">
+                    <div class="rule-title">
+                        <span data-i18n="rule10">10. Система наказаний</span>
+                    </div>
+                    <p class="rule-description" data-i18n="rule10Desc1">3 предупреждения = автоматический бан</p>
+                    <p class="rule-consequence" data-i18n="rule10Consequence">🚫 Решения модерации окончательны</p>
+                    <p class="rule-description" data-i18n="rule10Desc2">Администрация оставляет за собой право блокировки</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeContact">&times;</span>
+            <h2 class="modal-title" data-i18n="contactTitle">Связь с администрацией</h2>
+            
+            <div class="contact-options">
+                <div class="contact-option fade-in">
+                    <div class="contact-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h3 data-i18n="contactDeveloper">Разработчик сайта</h3>
+                        <p data-i18n="contactDeveloperDesc">Свяжитесь с разработчиком сайта</p>
+                        <a href="https://t.me/MixVictoria" target="_blank">@MixVictoria (Telegram)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="creatorModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeCreator">&times;</span>
+            <h2 class="modal-title" data-i18n="creatorTitle">Создатель клана</h2>
+            
+            <div class="contact-options">
+                <div class="contact-option fade-in">
+                    <div class="contact-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h3>Discord</h3>
+                        <p data-i18n="contactViaDiscord">Свяжитесь через Discord</p>
+                        <a href="http://discordapp.com/users/1261976358599397427" target="_blank">Профиль создателя</a>
+                    </div>
+                </div>
+                
+                <div class="contact-option fade-in">
+                    <div class="contact-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h3>Telegram</h3>
+                        <p data-i18n="contactViaTelegram">Свяжитесь через Telegram</p>
+                        <a href="https://t.me/Qvito1" target="_blank">@Qvito1</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="eventsModal">
+        <div class="modal-content events-modal-content">
+            <span class="close-btn" id="closeEvents">&times;</span>
+            <h2 class="modal-title" data-i18n="eventsTitle">События</h2>
+            
+            <div id="eventsList">
+                <!-- События будут добавляться здесь -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="customizationModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeCustomization">&times;</span>
+            <h2 class="modal-title" data-i18n="customizationTitle">Кастомизация</h2>
+            
+            <!-- Профиль пользователя УДАЛЕН -->
+            
+            <div class="customization-section fade-in">
+                <h3 data-i18n="languageTitle">Язык</h3>
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="ru">
+                        <i class="fas fa-language"></i> Русский
+                    </button>
+                    <button class="lang-btn" data-lang="en">
+                        <i class="fas fa-language"></i> English
+                    </button>
+                    <button class="lang-btn" data-lang="es">
+                        <i class="fas fa-language"></i> Español
+                    </button>
+                    <button class="lang-btn" data-lang="tr">
+                        <i class="fas fa-language"></i> Türkçe
+                    </button>
+                </div>
+            </div>
+            
+            <div class="customization-section fade-in">
+                <h3 data-i18n="musicTitle">Управление музыкой</h3>
+                <div class="file-input-container">
+                    <label class="file-input-label">
+                        <i class="fas fa-music"></i> <span data-i18n="selectMusic">Выбрать музыку (MP3)</span>
+                        <input type="file" id="musicFile" class="file-input" accept=".mp3,audio/*">
+                    </label>
+                    <div class="file-name" id="musicFileName" data-i18n="noFileSelected">Файл не выбран</div>
+                </div>
+                <div class="music-controls">
+                    <button id="playMusicBtn" class="creator-btn">
+                        <i class="fas fa-play"></i> <span data-i18n="playBtn">Включить</span>
+                    </button>
+                    <button id="pauseMusicBtn" class="creator-btn">
+                        <i class="fas fa-pause"></i> <span data-i18n="pauseBtn">Пауза</span>
+                    </button>
+                    <button id="stopMusicBtn" class="creator-btn">
+                        <i class="fas fa-stop"></i> <span data-i18n="stopBtn">Стоп</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="backgroundMusic" loop></audio>
+
+    <script>
+        // Инициализация данных
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация хранилищ при первом запуске
+            if (!localStorage.getItem('events')) {
+                // Пример событий для демонстрации
+                const demoEvents = [
+                    {
+                        id: 1,
+                        text: "Запуск нового сезона событий",
+                        date: "15.07.2025",
+                        author: "Администрация",
+                        role: "admin"
+                    },
+                    {
+                        id: 2,
+                        text: "Обновление системы правил сообщества",
+                        date: "10.07.2025",
+                        author: "Администрация",
+                        role: "admin"
+                    },
+                    {
+                        id: 3,
+                        text: "Турнир по новой игре состоится 25 июля",
+                        date: "05.07.2025",
+                        author: "Создатель",
+                        role: "creator"
+                    }
+                ];
+                localStorage.setItem('events', JSON.stringify(demoEvents));
+            }
+            
+            // Загрузка сохраненной музыки
+            const savedMusic = localStorage.getItem('customMusic');
+            if (savedMusic) {
+                document.getElementById('backgroundMusic').src = savedMusic;
+            }
+            
+            // Создание частиц фона
+            createParticles();
+            
+            // Обработчики событий
+            setupEventHandlers();
+            
+            // Инициализация языка
+            initLanguage();
+            
+            // Загрузка событий
+            loadEvents();
+        });
+
+        // Инициализация системы языка
+        function initLanguage() {
+            const savedLang = localStorage.getItem('language') || 'ru';
+            changeLanguage(savedLang);
+            
+            // Устанавливаем активную кнопку языка
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.dataset.lang === savedLang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Создание частиц фона
+        function createParticles() {
+            const background = document.querySelector('.background');
+            
+            // Создаем 30 частиц
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Случайный размер и позиция
+                const size = Math.random() * 30 + 10;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 15;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                background.appendChild(particle);
+            }
+            
+            // Анимация появления элементов при прокрутке
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // Показать уведомление
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            
+            notification.innerHTML = `
+                <i class="fas ${icon} notification-icon"></i>
+                <div>${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Показываем уведомление
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Убираем через 5 секунд
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 5000);
+        }
+
+        // Загрузка событий
+        function loadEvents() {
+            const events = JSON.parse(localStorage.getItem('events') || []);
+            const eventsList = document.getElementById('eventsList');
+            if (!eventsList) return;
+            
+            eventsList.innerHTML = '';
+            
+            if (events.length === 0) {
+                eventsList.innerHTML = '<p class="fade-in" style="text-align: center; color: var(--text-secondary); padding: 20px;">Событий пока нет</p>';
+                return;
+            }
+            
+            events.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.className = 'event-item fade-in';
+                eventItem.innerHTML = `
+                    <p>${event.text}</p>
+                    <div class="event-date">${event.date} | ${event.author} (${event.role})</div>
+                `;
+                eventsList.appendChild(eventItem);
+            });
+        }
+
+        // Функции для управления модальными окнами
+        function showModal(modal) {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Настройка обработчиков событий
+        function setupEventHandlers() {
+            // Получаем элементы
+            const rulesModal = document.getElementById('rulesModal');
+            const contactModal = document.getElementById('contactModal');
+            const creatorModal = document.getElementById('creatorModal');
+            const customizationModal = document.getElementById('customizationModal');
+            const eventsModal = document.getElementById('eventsModal');
+            
+            // Кнопки открытия
+            const viewRulesBtn = document.getElementById('viewRulesBtn');
+            const contactBtn = document.getElementById('contactBtn');
+            const creatorBtn = document.getElementById('creatorBtn');
+            const customizationBtn = document.getElementById('customizationBtn');
+            const eventsBtn = document.getElementById('eventsBtn');
+            const addBotBtn = document.getElementById('addBotBtn');
+            
+            // Кнопки закрытия
+            const closeRules = document.getElementById('closeRules');
+            const closeContact = document.getElementById('closeContact');
+            const closeCreator = document.getElementById('closeCreator');
+            const closeCustomization = document.getElementById('closeCustomization');
+            const closeEvents = document.getElementById('closeEvents');
+            
+            // Управление музыкой
+            const playMusicBtn = document.getElementById('playMusicBtn');
+            const pauseMusicBtn = document.getElementById('pauseMusicBtn');
+            const stopMusicBtn = document.getElementById('stopMusicBtn');
+            const musicFile = document.getElementById('musicFile');
+            const musicFileName = document.getElementById('musicFileName');
+            
+            // Смена языка
+            const langButtons = document.querySelectorAll('.lang-btn');
+            
+            // Открытие модальных окон
+            viewRulesBtn.addEventListener('click', () => showModal(rulesModal));
+            contactBtn.addEventListener('click', () => showModal(contactModal));
+            creatorBtn.addEventListener('click', () => showModal(creatorModal));
+            customizationBtn.addEventListener('click', () => showModal(customizationModal));
+            eventsBtn.addEventListener('click', () => {
+                showModal(eventsModal);
+                loadEvents();
+            });
+            
+            // Закрытие модальных окон
+            closeRules.addEventListener('click', () => closeModal(rulesModal));
+            closeContact.addEventListener('click', () => closeModal(contactModal));
+            closeCreator.addEventListener('click', () => closeModal(creatorModal));
+            closeCustomization.addEventListener('click', () => closeModal(customizationModal));
+            closeEvents.addEventListener('click', () => closeModal(eventsModal));
+            
+            // Закрытие при клике вне модального окна
+            window.addEventListener('click', (e) => {
+                if (e.target === rulesModal) closeModal(rulesModal);
+                if (e.target === contactModal) closeModal(contactModal);
+                if (e.target === creatorModal) closeModal(creatorModal);
+                if (e.target === customizationModal) closeModal(customizationModal);
+                if (e.target === eventsModal) closeModal(eventsModal);
+            });
+            
+            // Кнопка добавления бота
+            addBotBtn.addEventListener('click', () => {
+                window.open('https://discord.com/oauth2/authorize?client_id=1391135763802099862&scope=bot+applications.commands', '_blank');
+            });
+            
+            // Выбор файла музыки
+            musicFile.addEventListener('change', function(e) {
+                if (this.files && this.files[0]) {
+                    const file = this.files[0];
+                    musicFileName.textContent = file.name;
+                    
+                    // Проверка типа файла
+                    if (!file.type.startsWith('audio/')) {
+                        showNotification('Пожалуйста, выберите аудиофайл (MP3)', 'error');
+                        return;
+                    }
+                    
+                    // Создаем временный URL для воспроизведения
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const musicElement = document.getElementById('backgroundMusic');
+                        musicElement.src = event.target.result;
+                        
+                        // Сохраняем музыку в localStorage
+                        localStorage.setItem('customMusic', event.target.result);
+                        showNotification('Музыка успешно загружена!', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Воспроизведение музыки
+            playMusicBtn.addEventListener('click', () => {
+                const musicElement = document.getElementById('backgroundMusic');
+                if (musicElement.src) {
+                    musicElement.play().catch(e => {
+                        showNotification('Ошибка воспроизведения: ' + e.message, 'error');
+                    });
+                } else {
+                    showNotification('Сначала выберите файл музыки!', 'error');
+                }
+            });
+            
+            // Пауза музыки
+            pauseMusicBtn.addEventListener('click', () => {
+                document.getElementById('backgroundMusic').pause();
+            });
+            
+            // Остановка музыки
+            stopMusicBtn.addEventListener('click', () => {
+                const musicElement = document.getElementById('backgroundMusic');
+                musicElement.pause();
+                musicElement.currentTime = 0;
+            });
+            
+            // Смена языка
+            langButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.dataset.lang;
+                    changeLanguage(lang);
+                    
+                    // Обновляем активную кнопку языка
+                    langButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    showNotification(`Язык изменен на ${this.textContent.trim()}`, 'success');
+                });
+            });
+        }
+
+        // Система перевода
+        const translations = {
+            ru: {
+                siteTitle: "Тьма и свет",
+                navContact: "Связь",
+                navCreator: "Создатель",
+                navCustomization: "Кастомизация",
+                heroTitle: "Добро пожаловать в группу!",
+                heroSubtitle: "Перед тем как работать, ознакомьтесь с правилами сервера и присоединяйтесь к нашему сообществу",
+                addBotBtn: "Добавить бота",
+                rulesBtn: "Правила сервера",
+                footerAppreciation: "Любим вас",
+                footerText: "Сообщество \"Тьма и свет\"",
+                rulesTitle: "ПРАВИЛА СЕРВЕРА",
+                rulesSubtitle: "Соблюдение правил обязательно для всех участников",
+                rule1: "1. Вежливость и уважение",
+                rule1Punishment: "1 пред. → 24ч мут → бан",
+                rule1Desc: "Оскорбления, унижения, переход на личности",
+                rule1Consequence: "🚫 Немедленные санкции",
+                rule2: "2. Запрет спама",
+                rule2Punishment: "1 пред. → 7д мут → бан",
+                rule2Desc: "Реклама, флуд, бессмысленные сообщения",
+                rule3: "3. Запрещенный контент",
+                rule3Punishment: "Бан",
+                rule3Desc: "Нелегальные, вредоносные материалы",
+                rule3Consequence: "🚫 Немедленный бан",
+                rule4: "4. Конфиденциальность",
+                rule4Punishment: "1 пред. → 30д мут → бан",
+                rule4Desc: "Разглашение личной информации",
+                rule5: "5. Запрет флуда",
+                rule5Punishment: "1 пред. → 12ч мут → 24ч мут",
+                rule5Desc: "Спам сообщениями, повторение",
+                rule6: "6. Подчинение модерации",
+                rule6Punishment: "1 пред. → 24ч мут → бан",
+                rule6Desc: "Игнорирование указаний модераторов",
+                rule10: "10. Система наказаний",
+                rule10Desc1: "3 предупреждения = автоматический бан",
+                rule10Consequence: "🚫 Решения модерации окончательны",
+                rule10Desc2: "Администрация оставляет за собой право блокировки",
+                contactTitle: "Связь с администрацией",
+                contactDeveloper: "Разработчик сайта",
+                contactDeveloperDesc: "Свяжитесь с разработчиком сайта",
+                creatorTitle: "Создатель клана",
+                contactViaDiscord: "Свяжитесь через Discord",
+                contactViaTelegram: "Свяжитесь через Telegram",
+                eventsTitle: "События",
+                customizationTitle: "Кастомизация",
+                languageTitle: "Язык",
+                selectMusic: "Выбрать музыку (MP3)",
+                noFileSelected: "Файл не выбран",
+                playBtn: "Включить",
+                pauseBtn: "Пауза",
+                stopBtn: "Стоп",
+            },
+            en: {
+                siteTitle: "Darkness and Light",
+                navContact: "Contact",
+                navCreator: "Creator",
+                navCustomization: "Customization",
+                heroTitle: "Welcome to the group!",
+                heroSubtitle: "Before starting, familiarize yourself with the server rules and join our community",
+                addBotBtn: "Add Bot",
+                rulesBtn: "Server Rules",
+                footerAppreciation: "We love you",
+                footerText: "Darkness and Light Community",
+                rulesTitle: "SERVER RULES",
+                rulesSubtitle: "Compliance with the rules is mandatory for all participants",
+                rule1: "1. Politeness and respect",
+                rule1Punishment: "1 warn → 24h mute → ban",
+                rule1Desc: "Insults, humiliation, personal attacks",
+                rule1Consequence: "🚫 Immediate sanctions",
+                rule2: "2. No spam",
+                rule2Punishment: "1 warn → 7d mute → ban",
+                rule2Desc: "Advertising, flood, meaningless messages",
+                rule3: "3. Prohibited content",
+                rule3Punishment: "Ban",
+                rule3Desc: "Illegal, malicious materials",
+                rule3Consequence: "🚫 Immediate ban",
+                rule4: "4. Confidentiality",
+                rule4Punishment: "1 warn → 30d mute → ban",
+                rule4Desc: "Disclosure of personal information",
+                rule5: "5. No flooding",
+                rule5Punishment: "1 warn → 12h mute → 24h mute",
+                rule5Desc: "Message spam, repetition",
+                rule6: "6. Obey moderation",
+                rule6Punishment: "1 warn → 24h mute → ban",
+                rule6Desc: "Ignoring moderator instructions",
+                rule10: "10. Punishment system",
+                rule10Desc1: "3 warnings = automatic ban",
+                rule10Consequence: "🚫 Moderator decisions are final",
+                rule10Desc2: "Administration reserves the right to block",
+                contactTitle: "Contact Administration",
+                contactDeveloper: "Website Developer",
+                contactDeveloperDesc: "Contact the website developer",
+                creatorTitle: "Clan Creator",
+                contactViaDiscord: "Contact via Discord",
+                contactViaTelegram: "Contact via Telegram",
+                eventsTitle: "Events",
+                customizationTitle: "Customization",
+                languageTitle: "Language",
+                selectMusic: "Select Music (MP3)",
+                noFileSelected: "No file selected",
+                playBtn: "Play",
+                pauseBtn: "Pause",
+                stopBtn: "Stop",
+            },
+            es: {
+                siteTitle: "Oscuridad y Luz",
+                navContact: "Contacto",
+                navCreator: "Creador",
+                navCustomization: "Personalización",
+                heroTitle: "¡Bienvenido al grupo!",
+                heroSubtitle: "Antes de comenzar, familiarícese con las reglas del servidor y únase a nuestra comunidad",
+                addBotBtn: "Agregar Bot",
+                rulesBtn: "Reglas del Servidor",
+                footerAppreciation: "Te amamos",
+                footerText: "Comunidad Oscuridad y Luz",
+                rulesTitle: "REGLAS DEL SERVIDOR",
+                rulesSubtitle: "El cumplimiento de las reglas es obligatorio para todos los participantes",
+                rule1: "1. Cortesía y respeto",
+                rule1Punishment: "1 adv. → 24h mute → ban",
+                rule1Desc: "Insultos, humillaciones, ataques personales",
+                rule1Consequence: "🚫 Sanciones inmediatas",
+                rule2: "2. No spam",
+                rule2Punishment: "1 adv. → 7d mute → ban",
+                rule2Desc: "Publicidad, inundación, mensajes sin sentido",
+                rule3: "3. Contenido prohibido",
+                rule3Punishment: "Ban",
+                rule3Desc: "Materiales ilegales, maliciosos",
+                rule3Consequence: "🚫 Prohibición inmediata",
+                rule4: "4. Confidencialidad",
+                rule4Punishment: "1 adv. → 30d mute → ban",
+                rule4Desc: "Divulgación de información personal",
+                rule5: "5. No inundar",
+                rule5Punishment: "1 adv. → 12h mute → 24h mute",
+                rule5Desc: "Spam de mensajes, repetición",
+                rule6: "6. Obedecer la moderación",
+                rule6Punishment: "1 adv. → 24h mute → ban",
+                rule6Desc: "Ignorar las instrucciones del moderador",
+                rule10: "10. Sistema de castigo",
+                rule10Desc1: "3 advertencias = ban automático",
+                rule10Consequence: "🚫 Las decisiones del moderador son definitivas",
+                rule10Desc2: "La administración se reserva el derecho de bloquear",
+                contactTitle: "Contactar con la administración",
+                contactDeveloper: "Desarrollador del sitio web",
+                contactDeveloperDesc: "Contacte con el desarrollador del sitio web",
+                creatorTitle: "Creador del clan",
+                contactViaDiscord: "Contacto a través de Discord",
+                contactViaTelegram: "Contacto a través de Telegram",
+                eventsTitle: "Eventos",
+                customizationTitle: "Personalización",
+                languageTitle: "Idioma",
+                selectMusic: "Seleccionar música (MP3)",
+                noFileSelected: "Ningún archivo seleccionado",
+                playBtn: "Reproducir",
+                pauseBtn: "Pausa",
+                stopBtn: "Detener",
+            },
+            tr: {
+                siteTitle: "Karanlık ve Işık",
+                navContact: "İletişim",
+                navCreator: "Yaratıcı",
+                navCustomization: "Özelleştirme",
+                heroTitle: "Gruba hoş geldiniz!",
+                heroSubtitle: "Çalışmaya başlamadan önce, sunucu kurallarını öğrenin ve topluluğumuza katılın",
+                addBotBtn: "Bot Ekle",
+                rulesBtn: "Sunucu Kuralları",
+                footerAppreciation: "Seni seviyoruz",
+                footerText: "Karanlık ve Işık Topluluğu",
+                rulesTitle: "SUNUCU KURALLARI",
+                rulesSubtitle: "Kurallara uymak tüm katılımcılar için zorunludur",
+                rule1: "1. Nezaket ve saygı",
+                rule1Punishment: "1 uyarı → 24s sessiz → ban",
+                rule1Desc: "Hakaretler, aşağılamalar, kişisel saldırılar",
+                rule1Consequence: "🚫 Anlık yaptırımlar",
+                rule2: "2. Spam yok",
+                rule2Punishment: "1 uyarı → 7g sessiz → ban",
+                rule2Desc: "Reklam, flood, anlamsız mesajlar",
+                rule3: "3. Yasaklı içerik",
+                rule3Punishment: "Ban",
+                rule3Desc: "Yasadışı, kötü amaçlı materyaller",
+                rule3Consequence: "🚫 Anında ban",
+                rule4: "4. Gizlilik",
+                rule4Punishment: "1 uyarı → 30g sessiz → ban",
+                rule4Desc: "Kişisel bilgilerin ifşası",
+                rule5: "5. Flood yok",
+                rule5Punishment: "1 uyarı → 12s sessiz → 24s sessiz",
+                rule5Desc: "Mesaj spam'ı, tekrarlama",
+                rule6: "6. Moderasyona uyun",
+                rule6Punishment: "1 uyarı → 24s sessiz → ban",
+                rule6Desc: "Moderatör talimatlarını görmezden gelme",
+                rule10: "10. Ceza sistemi",
+                rule10Desc1: "3 uyarı = otomatik ban",
+                rule10Consequence: "🚫 Moderatör kararları nihaidir",
+                rule10Desc2: "Yönetim engelleme hakkını saklı tutar",
+                contactTitle: "Yönetimle iletişim",
+                contactDeveloper: "Web sitesi geliştiricisi",
+                contactDeveloperDesc: "Web sitesi geliştiricisiyle iletişime geçin",
+                creatorTitle: "Klan Yaratıcısı",
+                contactViaDiscord: "Discord üzerinden iletişim",
+                contactViaTelegram: "Telegram üzerinden iletişim",
+                eventsTitle: "Etkinlikler",
+                customizationTitle: "Özelleştirme",
+                languageTitle: "Dil",
+                selectMusic: "Müzik Seç (MP3)",
+                noFileSelected: "Dosya seçilmedi",
+                playBtn: "Oynat",
+                pauseBtn: "Duraklat",
+                stopBtn: "Durdur",
+            }
+        };
+        
+        // Функция смены языка
+        function changeLanguage(lang) {
+            localStorage.setItem('language', lang);
+            applyTranslations();
+        }
+        
+        // Применение переводов
+        function applyTranslations() {
+            const lang = localStorage.getItem('language') || 'ru';
+            
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+        }
+    </script>
+</body>
+</html>
